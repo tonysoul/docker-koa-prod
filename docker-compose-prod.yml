@@ -1,0 +1,30 @@
+version: "3"
+
+volumes:
+        static:
+        db:
+
+services:
+        web:
+                build:
+                        context: ./
+                        dockerfile: ./compose/node/Dockerfile 
+                ports:
+                        - "3000:3000"
+                volumes:
+                        - static:/code/static
+        nginx:
+                build:
+                        context: ./
+                        dockerfile: ./compose/nginx/Dockerfile
+                ports:
+                        - "80:80"
+                volumes:
+                        - static:/code/static
+        mysql:
+                image: mysql:5.6
+                env_file: .env
+                volumes:
+                        - db:/var/lib/mysql
+                ports:
+                        - "3306:3306"
